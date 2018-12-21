@@ -1612,10 +1612,11 @@ extension PulleyViewController: UIScrollViewDelegate {
         
         if scrollView == drawerScrollView
         {
-            let partialRevealHeight: CGFloat = (drawerContentViewController as? PulleyDrawerViewControllerDelegate)?.partialRevealDrawerHeight?(bottomSafeArea: pulleySafeAreaInsets.bottom) ?? kPulleyDefaultPartialRevealHeight
+            var partialRevealHeight: CGFloat = (drawerContentViewController as? PulleyDrawerViewControllerDelegate)?.partialRevealDrawerHeight?(bottomSafeArea: pulleySafeAreaInsets.bottom) ?? kPulleyDefaultPartialRevealHeight
 
             let lowestStop = getStopList().min() ?? 0
-            
+            partialRevealHeight = lowestStop
+
             if (scrollView.contentOffset.y - pulleySafeAreaInsets.bottom) > partialRevealHeight - lowestStop && supportedPositions.contains(.open)
             {
                 // Calculate percentage between partial and full reveal
@@ -1631,7 +1632,7 @@ extension PulleyViewController: UIScrollViewDelegate {
                 (drawerContentViewController as? PulleyDrawerViewControllerDelegate)?.makeUIAdjustmentsForFullscreen?(progress: progress, bottomSafeArea: pulleySafeAreaInsets.bottom)
                 (primaryContentViewController as? PulleyPrimaryContentControllerDelegate)?.makeUIAdjustmentsForFullscreen?(progress: progress, bottomSafeArea: pulleySafeAreaInsets.bottom)
                 
-                backgroundDimmingView.alpha = progress * backgroundDimmingOpacity
+                backgroundDimmingView.alpha = backgroundDimmingOpacity //progress * backgroundDimmingOpacity
                 
                 backgroundDimmingView.isUserInteractionEnabled = true
             }
@@ -1644,7 +1645,7 @@ extension PulleyViewController: UIScrollViewDelegate {
                     delegate?.makeUIAdjustmentsForFullscreen?(progress: 0.0, bottomSafeArea: pulleySafeAreaInsets.bottom)
                     (drawerContentViewController as? PulleyDrawerViewControllerDelegate)?.makeUIAdjustmentsForFullscreen?(progress: 0.0, bottomSafeArea: pulleySafeAreaInsets.bottom)
                     (primaryContentViewController as? PulleyPrimaryContentControllerDelegate)?.makeUIAdjustmentsForFullscreen?(progress: 0.0, bottomSafeArea: pulleySafeAreaInsets.bottom)
-                    
+
                     backgroundDimmingView.isUserInteractionEnabled = false
                 }
             }
